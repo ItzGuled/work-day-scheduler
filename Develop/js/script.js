@@ -5,22 +5,33 @@ $("#currentDay").text(jumbo);
 
 // function for saving the text area
 var saveTasks = function (event) {
-  console.log('line 8', event);
-  const divId = event.target.id.match(/\d+/g)[0];
-  console.log("line 10", divId);
-  var textBox = $(`#${divId}`).value;
-  localStorage.setItem("description", textBox);
-  console.log(event.target);
+  event.stopPropagation();
+  const divId = event.target.id.split("-")[1];
+  var divEl = $(`#${divId}`);
+  var textB = divEl.children("textarea");
+  var textBox = textB[0].value;
+  localStorage.setItem(divId, textBox);
+};
+
+var loadTasks = function () {
+  for (var i = 0; i <= 8; i++) {
+   var value = localStorage.getItem(i);
+   var divEl = $(`#${i}`);
+   var textB = divEl.children("textarea");
+   textB[0].value = value;
+  };
 };
 
 var addListeners = function () {
   for (var i = 0; i <= 8; i++) {
     const divEl = $(`#${i}`);
-    var button = divEl.children("button");
-    $(button[0]).attr("id", `btn${i}`);
-    button[0].addEventListener("click", saveTasks);
+    var buttons = divEl.children("button");
+    var button = buttons[0];
+    $(button).attr("id", `btn-${i}`);
+    button.addEventListener("click", saveTasks);
   }
 };
 // saveBtn.addEventListener("click", saveTasks);
 
 addListeners();
+loadTasks();
