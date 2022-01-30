@@ -1,9 +1,7 @@
-// declaring variables
 var now = moment();
 var jumbo = now.format("dddd, MMMM D");
 $("#currentDay").text(jumbo);
 
-// function for saving the text area
 var saveTasks = function (event) {
   event.stopPropagation();
   const divId = event.target.id.split("-")[1];
@@ -15,11 +13,11 @@ var saveTasks = function (event) {
 
 var loadTasks = function () {
   for (var i = 0; i <= 8; i++) {
-   var value = localStorage.getItem(i);
-   var divEl = $(`#${i}`);
-   var textB = divEl.children("textarea");
-   textB[0].value = value;
-  };
+    var value = localStorage.getItem(i);
+    var divEl = $(`#${i}`);
+    var textB = divEl.children("textarea");
+    textB[0].value = value;
+  }
 };
 
 var addListeners = function () {
@@ -31,7 +29,27 @@ var addListeners = function () {
     button.addEventListener("click", saveTasks);
   }
 };
-// saveBtn.addEventListener("click", saveTasks);
+
+var timeStamp = function () {
+  var currentTime = moment().format("H");
+  var times = document.querySelectorAll(".row");
+  var time = $(times).children("div");
+
+  for (var i = 0; i < times.length; i++) {
+    var militaryId = time[i].id;
+    var changeId = document.getElementById(times[i].id);
+    $(times[i].id).removeClass(".present .past .future");
+
+    if (militaryId < currentTime) {
+      $(changeId).addClass("past");
+    } else if (militaryId === currentTime) {
+      $(changeId).addClass("present");
+    } else {
+      $(changeId).addClass("future");
+    }
+  }
+};
 
 addListeners();
 loadTasks();
+timeStamp();
